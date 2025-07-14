@@ -19,7 +19,7 @@ jobs:
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
       - name: Install dependencies via uv
-        run: uv pip install
+        run: uv install
 
       - name: Sphinx build
         run: sphinx-build docs _build

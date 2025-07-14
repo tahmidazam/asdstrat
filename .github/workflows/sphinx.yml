@@ -25,9 +25,7 @@ jobs:
         run: uv pip install -r pyproject.toml
 
       - name: Sphinx build
-        run:
-          - cd docs
-          - make html
+        run: cd docs; make html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

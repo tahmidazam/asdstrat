@@ -3,24 +3,22 @@ name: "Sphinx: Render docs"
 on: push
 
 jobs:
-  build:
+  docs:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - name: Build HTML
-        uses: ammaraskar/sphinx-action@master
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: html-docs
-          path: docs/_build/html/
-      - name: Deploy
+      - uses: actions/setup-python@v5
+      - name: Install dependencies
+        run: |
+          pip install sphinx
+      - name: Sphinx build
+        run: |
+          sphinx-build doc _build
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main'
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         with:
+          publish_branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/_build/html
+          publish_dir: _build/
+          force_orphan: true
